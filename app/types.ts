@@ -1,0 +1,14 @@
+export type TypingResult = {
+    timeline : {
+        wpm : number ;
+        accuracy : number;
+        raw : number ;
+        second : number;
+    },
+    error : number;
+    testType : string | null;
+    qouteAuthor : string;
+    data : Date;
+};
+
+export type QouteLengthType = 'short' | 'medium' | 'Long' |'all';
