@@ -8,7 +8,7 @@ export type TypingResult = {
     error : number;
     testType : string | null;
     qouteAuthor : string;
-    data : Date;
+    date? : Date;
 };
 
 export type QouteLengthType = 'short' | 'medium' | 'Long' |'all';
