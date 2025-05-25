@@ -1,0 +1,86 @@
+/* app/styles/themes.css */
+
+/* Default Theme */
+:root {
+  --clr-main: #fe6969;
+  --clr-bg: #0d0d1d;
+  --clr-text: #dcdcdc;
+  --clr-tooltip-bg: #000;
+  --clr-tooltip-text: #dcdcdc;
+  --clr-modal: #121229;
+  --clr-char: #ffffff63;
+  --clr-char-correct: #f3f2f2;
+  --clr-char-incorrect: #fc626a;
+  --clr-char-extra: #dcdcdc40;
+  --clr-caret: #f8aa35;
+  --clr-border: #28285a;
+  --typemode-bg: rgba(0, 0, 0, 0.25);
+}
+
+/* Midnight Theme */
+[data-theme='midnight'] {
+  --clr-main: #60759f;
+  --clr-bg: #0b0e13;
+  --clr-text: #9fadc6;
+  --clr-tooltip-bg: hsla(0, 0%, 6%, 0.95);
+  --clr-tooltip-text: #fff;
+  --clr-modal: #171c27;
+  --clr-char: #394760;
+  --clr-char-correct: #9fadc6;
+  --clr-char-incorrect: #c27070;
+  --clr-char-extra: #c28b70;
+  --clr-caret: #60759f;
+  --clr-border: #252f40;
+  --typemode-bg: rgba(0, 0, 0, 0.25);
+}
+
+/* Retro Theme */
+[data-theme='retro'] {
+  --clr-main: #1d1b17;
+  --clr-bg: #dad3c1;
+  --clr-text: #1d1b17;
+  --clr-tooltip-bg: hsla(0, 0%, 6%, 0.95);
+  --clr-tooltip-text: #fff;
+  --clr-modal: #c4c0b3;
+  --clr-char: #918b7d;
+  --clr-char-correct: #1d1b17;
+  --clr-char-incorrect: #bf616a;
+  --clr-char-extra: #793e44;
+  --clr-caret: #1d1b17;
+  --clr-border: #a09883;
+  --typemode-bg: rgba(0, 0, 0, 0.075);
+}
+
+/* Cyberpunk Theme (custom values) */
+[data-theme='cyberpunk'] {
+  --clr-main: #ff00ff;
+  --clr-bg: #050505;
+  --clr-text: #00ffff;
+  --clr-tooltip-bg: #222;
+  --clr-tooltip-text: #fff;
+  --clr-modal: #0f0f0f;
+  --clr-char: #ff66ff;
+  --clr-char-correct: #00ffff;
+  --clr-char-incorrect: #ff4444;
+  --clr-char-extra: #ffccff;
+  --clr-caret: #ff00ff;
+  --clr-border: #333;
+  --typemode-bg: rgba(255, 0, 255, 0.1);
+}
+
+/* Neon Theme (custom values) */
+[data-theme='neon'] {
+  --clr-main: #39ff14;
+  --clr-bg: #000000;
+  --clr-text: #ffffff;
+  --clr-tooltip-bg: #0a0a0a;
+  --clr-tooltip-text: #39ff14;
+  --clr-modal: #101010;
+  --clr-char: #39ff14;
+  --clr-char-correct: #0f0;
+  --clr-char-incorrect: #f00;
+  --clr-char-extra: #0ff;
+  --clr-caret: #0f0;
+  --clr-border: #1f1f1f;
+  --typemode-bg: rgba(0, 255, 0, 0.1);
+}
