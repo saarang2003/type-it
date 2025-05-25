@@ -11,4 +11,4 @@ export type TypingResult = {
     date? : Date;
 };
 
-export type QouteLengthType = 'short' | 'medium' | 'Long' |'all';
+export type QouteLengthType = 'short' | 'medium' | 'long' |'all';

@@ -1,6 +1,6 @@
 // lib/api.ts (or similar path)
 
-import { QuoteLengthType } from '../types';
+import { QouteLengthType } from '../types';
 
 const API_URL = 'https://api.quotable.io';
 
@@ -17,7 +17,7 @@ export type QuoteType = {
 };
 
 export async function getRandomQuoteByLength(
-  length: QuoteLengthType,
+  length: QouteLengthType,
   tags?: string[] | null,
   abortController?: AbortController | null
 ): Promise<QuoteType> {
