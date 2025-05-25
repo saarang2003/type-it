@@ -9,7 +9,7 @@ export const data = {
 
     typemode :{
         time : [30 , 60 , 120],
-        words : [20 , 30 ,50, 100],
+        words : [30 , 40 ,50, 100],
         qoute : ['all' , 'short' , 'medium' , 'long'] as QouteLengthType[],
     },
 
