@@ -1,6 +1,4 @@
 
-
-
 export { default as IconAccount } from './account.svg';
 export { default as IconAlertCircle } from './alert-circle.svg';
 export { default as IconAngleDoubleLeft } from './angle-double-left.svg';

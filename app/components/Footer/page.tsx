@@ -1,34 +1,30 @@
+// components/Footer.tsx
+import { useContext } from "react";
 import { TypingResult } from "@/app/types";
 import { IconGithub, IconRedirect } from "@/public/assets";
-import { useContext } from "react";
+import Tooltip from "@/components/Tooltip"; // Make sure this exists
+import { TypingContext } from "@/context/TypingContext"; // Make sure this exists
 
-
-
-
-
-interface Props{
-    roomCode : string | null;
-    opPreviewResult : (result : TypingResult) => void;
+interface Props {
+  roomCode: string | null;
+  opPreviewResult: (result: TypingResult) => void;
 }
 
-export default function Footer( props : Props) {
-    const { roomCode , onPreviewResult} = props;
+export default function Footer({ roomCode, opPreviewResult }: Props) {
+  const { typingFocused } = useContext(TypingContext);
 
-    const {typingFocused} = useContext(TypingContext);
-
-    return (
-        <footer
-        
-          className={`${styles.footer} opacity-transition ${
-        typingFocused ? 'hide' : ''
-      }`}>
-
-        <div>
-            <Tooltip
+  return (
+    <footer
+      className={`relative flex justify-between items-end px-8 pb-8 transition-opacity duration-200 ${
+        typingFocused ? "opacity-0 pointer-events-none" : "opacity-100"
+      }`}
+    >
+      <div className="flex items-center mr-8 space-x-2">
+        <Tooltip
           text={
-            <div className={styles['github-hover-wrapper']}>
+            <div className="flex items-center">
               <p>repository</p>
-              <IconRedirect className={styles['github-hover-wrapper__icon']} />
+              <IconRedirect className="w-[15px] h-[15px] ml-2.5" />
             </div>
           }
           position="right"
@@ -38,14 +34,13 @@ export default function Footer( props : Props) {
             href="https://github.com/LukaKobaidze/typing-app"
             rel="noreferrer"
             target="_blank"
-            className={styles.linksItemAnchor}
+            className="text-inherit"
             tabIndex={typingFocused ? -1 : undefined}
           >
             <IconGithub />
           </a>
         </Tooltip>
-        </div>
-
-        </footer>
-    )
+      </div>
+    </footer>
+  );
 }
