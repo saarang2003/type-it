@@ -1,8 +1,9 @@
 "use client";
 
 import { createContext, useEffect, useState } from 'react';
-import { TypingResult } from '@/types';
-import { ResultOptions } from '@/components/Typing/Result';
+import { TypingResult } from '../types';
+import { ResultOptions } from 'postcss/lib/result';
+
 
 interface Context {
   typingStarted: boolean;

@@ -1,10 +1,10 @@
 'use client';
 
 import { useContext } from 'react';
-import { TypemodeContext } from '@/context/typemode.context';
-import { IconTags } from '@/assets/image';
-import { ButtonRounded } from '@/components/UI';
-import Modal from '@/components/UI/Modal';
+import { TypeModeContext } from './typemode';
+import Modal from '../components/ui/Modal';
+import { IconTags } from '@/public/assets';
+import ButtonRounded from '../components/ui/ButtonRounded';
 
 interface Props {
   onClose: () => void;
@@ -17,10 +17,10 @@ export default function QuoteTagsModal({ onClose }: Props) {
     onToggleQuoteTag,
     onUpdateQuoteTagsMode,
     onClearSelectedQuoteTags,
-  } = useContext(TypemodeContext);
+  } = useContext(TypeModeContext);
 
   const onQuoteSelectionChange = (e: React.ChangeEvent<HTMLFormElement>) => {
-    const checkbox = e.target as HTMLInputElement;
+    const checkbox = e.target as unknown as HTMLInputElement;
     onToggleQuoteTag(Number(checkbox.value));
   };
 
