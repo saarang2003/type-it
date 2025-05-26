@@ -4,9 +4,10 @@ import useWindowDimensions from './(hooks)/useWindowDimensions';
 import Header from './components/Header';
 import Typemode from './components/Typemode';
 import Footer from './components/Footer';
+import Typing from './components/Typing/Typing';
 
 export default function App() {
-  const { typingFocused, resultPreview, typemodeVisible, onPreviewResult } =
+  const { typingFocused,  typemodeVisible, onPreviewResult } =
     useContext(TypingContext);
   const [windowWidth] = useWindowDimensions();
 
