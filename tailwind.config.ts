@@ -16,6 +16,10 @@ export default {
           '0%': { backgroundColor: 'var(--clr-main)' },
           '50%, 100%': { backgroundColor: 'rgba(255, 255, 255, 0.2)' },
         },
+         line: {
+          '0%': { transform: 'scaleX(0)' },
+          '100%': { transform: 'scaleX(1)' },
+        },
       },
       colors: {
         background: "var(--background)",
