@@ -2,20 +2,132 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap');
+
+/* Root variables */
 :root {
-  --background: #fff;
-  --foreground: #171717;
+  --clr-raw: #817979;
+  --clr-logo-icon: #fc626a;
+
+  --font-family-default: 'Roboto Mono', monospace;
+  --font-weight-regular: 400;
+  --font-weight-bold: 700;
+
+  /* Default theme colors (fallbacks) */
+  --clr-bg: #fff;
+  --clr-text: #171717;
+  --clr-modal: #f0f0f0;
+  --clr-main: #fc626a;
 }
 
+/* Dark mode override */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --clr-bg: #0a0a0a;
+    --clr-text: #ededed;
   }
 }
 
+/* Theme classes to override variables */
+/* You will need to define these variables for each theme */
+
+.theme--default {
+  --clr-bg: #ffffff;
+  --clr-text: #171717;
+  --clr-modal: #f0f0f0;
+  --clr-main: #fc626a;
+}
+
+.theme--midnight {
+  --clr-bg: #0f172a;
+  --clr-text: #e0e7ff;
+  --clr-modal: #1e293b;
+  --clr-main: #6366f1;
+}
+
+.theme--retro {
+  --clr-bg: #fef3c7;
+  --clr-text: #78350f;
+  --clr-modal: #fde68a;
+  --clr-main: #c2410c;
+}
+
+.theme--superuser {
+  --clr-bg: #1a1a1a;
+  --clr-text: #d1d5db;
+  --clr-modal: #374151;
+  --clr-main: #10b981;
+}
+
+.theme--vscode {
+  --clr-bg: #1e1e1e;
+  --clr-text: #d4d4d4;
+  --clr-modal: #252526;
+  --clr-main: #007acc;
+}
+
+/* Reset and global styles */
+
+svg,
+img {
+  display: block;
+}
+
+button {
+  font-family: inherit;
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-family-default);
+  font-weight: var(--font-weight-regular);
+  background-color: var(--clr-bg);
+  color: var(--clr-text);
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  max-width: 1100px;
+  min-width: 280px;
+  min-height: 100vh;
+  margin: 0 auto;
+}
+
+::-webkit-scrollbar {
+  width: 0.5em;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--clr-modal);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--clr-main);
+  border-radius: 100vw;
+}
+
+.opacity-transition {
+  transition: opacity 200ms;
+}
+
+.hide {
+  opacity: 0;
+}
+
+.bold {
+  font-weight: bold;
 }
