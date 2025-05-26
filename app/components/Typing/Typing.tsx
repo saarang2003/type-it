@@ -17,7 +17,6 @@ import Restart from './Restart';
 import Result from './Result';
 import Loading from '../ui/Loading';
 // Import your typewriter sound file (adjust the path as needed)
-import typewriterSound from '../../../public/assets/typewriter.wav';
 
 
 interface Props {
@@ -66,7 +65,7 @@ export default function Typing({
   const [timeCountdown, setTimeCountdown] = useState<number>(time);
   const [isLoading, setIsLoading] = useState(false);
   const [loadingError, setLoadingError] = useState<404 | 500 | null>(null);
-  const playTypingSound = useSound(typewriterSound, 0.3);
+  const playTypingSound = useSound('../../../public/typewriter.wav', 0.3);
 
   const isTypingDisabled =
     typingDisabled || isLoading || loadingError || (oneVersusOne && !typingStarted);

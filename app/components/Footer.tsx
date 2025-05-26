@@ -3,7 +3,7 @@
 import { useContext } from 'react';
 import { TypingContext } from '../(context)/typing';
 import Tooltip from './ui/Tooltip';
-import { IconGithub, IconRedirect } from '@/public/assets';
+import { IconRedirect } from '@/public/assets';
 
 export default function Footer() {
   const { typingFocused } = useContext(TypingContext);
@@ -32,7 +32,6 @@ export default function Footer() {
             className="text-inherit"
             tabIndex={typingFocused ? -1 : undefined}
           >
-            <IconGithub />
           </a>
         </Tooltip>
       </div>
