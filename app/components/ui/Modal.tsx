@@ -1,9 +1,10 @@
 'use client';
 
+import { FocusTrap } from 'focus-trap-react';
 import { useEffect } from 'react';
-import FocusTrap from 'focus-trap-react';
-import { IconClose } from '@/assets/image';
-import { AlertOutsideClick, Tooltip } from '@/components/UI';
+import AlertOutsideClick from './AlertOutsideClick';
+import Tooltip from './Tooltip';
+import { IconClose } from '@/public/assets';
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   onClose: () => void;

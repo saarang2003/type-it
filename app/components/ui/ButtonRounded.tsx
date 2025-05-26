@@ -1,5 +1,7 @@
+"use client";
+
 import { forwardRef } from 'react';
-import { Loading } from '@/components/UI';
+import Loading from './Loading';
 
 interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: '1' | '2';

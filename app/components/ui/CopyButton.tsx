@@ -1,8 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { IconContentCopy } from '@/assets/image';
-import { ButtonRounded, Tooltip } from '@/components/UI';
+import Tooltip from './Tooltip';
+import ButtonRounded from './ButtonRounded';
+import { IconContentCopy } from '@/public/assets';
+
 
 interface Props {
   value: string;

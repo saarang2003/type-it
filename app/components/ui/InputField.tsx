@@ -1,7 +1,9 @@
 "use client";
 
-import { IconEyeOff, IconEyeOn } from '@/assets/image';
-import { Tooltip } from '@/components/UI';
+import { IconEyeOff, IconEyeOn } from "@/public/assets";
+import Tooltip from "./Tooltip";
+
+
 
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   Icon: React.FunctionComponent<

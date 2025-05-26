@@ -1,6 +1,8 @@
 'use client';
 
-import { IconKeyboard } from '@/assets/image';
+import { IconKeyboard } from "@/public/assets";
+
+
 
 interface Props {
   colored: boolean;
