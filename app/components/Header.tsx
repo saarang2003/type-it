@@ -58,8 +58,6 @@ export default function Header({ windowWidth, onLogoClick }: Props) {
           ) : (
             <ButtonRounded
               className="flex items-center ml-auto min-w-0 overflow-hidden"
-              onClick={() => onOpenModal({ modal: 'account' })}
-              active={activeModal?.modal === 'account'}
               disabled={loadingUser}
             >
               <IconAccount className="flex-shrink-0" />

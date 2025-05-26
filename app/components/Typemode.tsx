@@ -1,19 +1,13 @@
 'use client';
 
 import { useContext, useMemo } from 'react';
-import { data } from '../(data)';
-import { TypemodeType } from '../(data)/types';
-import {
-  IconNumbers,
-  IconPunctuation,
-  IconQuote,
-  IconTags,
-  IconTime,
-  IconWords,
-} from '@/public/assets';
 import { TypeModeContext } from '../(context)/typemode';
-import { ModalContext } from '@/context/ModalContext';
-import Column ,{ ColumnProps }  from './Column';
+import { ModalContext } from '../(context)/modal';
+import { TypemodeType } from '../(data)/types';
+import Column, { ColumnProps } from './Column';
+import { data } from '../(data)';
+import { IconNumbers, IconPunctuation, IconQuote, IconTags, IconTime, IconWords } from '@/public/assets';
+import { QouteLengthType } from '../types';
 
 interface Props {
   className?: string;
@@ -68,7 +62,7 @@ export default function Typemode({ className }: Props) {
     ];
   }, [mode, punctuation, numbers, quoteTagsMode]);
 
-  const modeIcons = { time: IconTime, words: IconWords, quote: IconQuote };
+  const modeIcons: Record<TypemodeType, React.FC<React.SVGProps<SVGSVGElement>>> = { time: IconTime, words: IconWords, qoute: IconQuote };
 
   const colSecondButtons = useMemo<ColumnProps['buttons']>(() => {
     return typemodeKeys.map((modeLocal) => ({
@@ -95,9 +89,15 @@ export default function Typemode({ className }: Props) {
       }));
     }
 
-    return data.typemode.quote.map((quoteLocal) => ({
+    interface QuoteButton {
+      text: string;
+      action: () => void;
+      active: boolean;
+    }
+
+    return data.typemode.qoute.map((quoteLocal: string): QuoteButton => ({
       text: quoteLocal,
-      action: () => onQuote(quoteLocal),
+      action: () => onQuote(quoteLocal as QouteLengthType),
       active: quote === 'all' ? quoteLocal !== 'all' : quoteLocal === quote,
     }));
   }, [mode, time, words, quote]);
