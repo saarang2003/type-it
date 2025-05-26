@@ -1,3 +1,4 @@
+
 import  { Schema, Document, model } from "mongoose";
 
 // Reusable average stats type

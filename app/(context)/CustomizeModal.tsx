@@ -1,12 +1,18 @@
 'use client';
 
 import { useContext, useState } from 'react';
-import { ProfileContext } from '@/context/profile.context';
-import { data } from '@/data';
-import { IconCustomize } from '@/assets/image';
-import { Switch, Tooltip, ButtonRounded } from '@/components/UI';
-import Modal from '@/components/UI/Modal';
-import caretCSS from '@/components/Typing/Input/Caret/Caret.module.scss';
+import Modal from '../components/ui/Modal';
+import { IconCustomize } from '@/public/assets';
+import Tooltip from '../components/ui/Tooltip';
+import Switch from '../components/ui/Switch';
+import { data } from '../(data)';
+import ButtonRounded from '../components/ui/ButtonRounded';
+// import { ProfileContext } from '@/context/profile.context';
+// import { data } from '@/data';
+// import { IconCustomize } from '@/assets/image';
+// import { Switch, Tooltip, ButtonRounded } from '@/components/UI';
+// import Modal from '@/components/UI/Modal';
+
 
 interface Props {
   onClose: () => void;
@@ -18,13 +24,7 @@ const INPUT_WIDTH_MIN = 50;
 const INPUT_WIDTH_MAX = 100;
 
 export default function CustomizeModal({ onClose }: Props) {
-  const {
-    profile,
-    onCustomizeUpdateState,
-    onCustomizeToggleState,
-    onCustomizeResetState,
-    onCustomizeUpdateServer,
-  } = useContext(ProfileContext);
+
 
   const [activeTooltip, setActiveTooltip] = useState<'fontSize' | 'inputWidth' | null>(null);
 
@@ -164,7 +164,6 @@ export default function CustomizeModal({ onClose }: Props) {
                   }`}
                 >
                   <span
-                    className={`${caretCSS.caret} ${caretCSS[`caret--${caret}`]}`}
                   />
                 </button>
               </Tooltip>
