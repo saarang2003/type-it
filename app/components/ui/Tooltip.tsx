@@ -26,7 +26,6 @@ export default function Tooltip({
   width = 'auto',
   className = '',
   style,
-  classNamePopup = '',
   backgroundColor = '#333',
   pointerEvents = false,
   children,

@@ -1,22 +1,17 @@
 // components/Footer.tsx
-import { useContext } from "react";
-import { TypingResult } from "@/app/types";
-import { IconGithub, IconRedirect } from "@/public/assets";
-import Tooltip from "@/components/Tooltip"; // Make sure this exists
-import { TypingContext } from "@/context/TypingContext"; // Make sure this exists
+"use client";
+import { useContext } from 'react';
+import { TypingContext } from '../(context)/typing';
+import Tooltip from './ui/Tooltip';
+import { IconGithub, IconRedirect } from '@/public/assets';
 
-interface Props {
-  roomCode: string | null;
-  opPreviewResult: (result: TypingResult) => void;
-}
-
-export default function Footer({ roomCode, opPreviewResult }: Props) {
+export default function Footer() {
   const { typingFocused } = useContext(TypingContext);
 
   return (
     <footer
       className={`relative flex justify-between items-end px-8 pb-8 transition-opacity duration-200 ${
-        typingFocused ? "opacity-0 pointer-events-none" : "opacity-100"
+        typingFocused ? 'opacity-0 pointer-events-none' : 'opacity-100'
       }`}
     >
       <div className="flex items-center mr-8 space-x-2">

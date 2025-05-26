@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { TextButton } from '@/components/UI';
+import TextButton from './ui/TextButton';
 
 export interface ColumnProps {
   buttons: {
