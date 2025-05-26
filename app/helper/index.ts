@@ -1,7 +1,8 @@
-
-import { data } from "../(data)";
-import { TypingWords } from "../components/Typing/types";
 import { generate } from "random-words";
+import { TypingWords } from "../components/Typing/types";
+import { data } from "../(data)";
+
+
 
 export function firstLetterUpperCase(word: string) {
   return word[0].toUpperCase() + word.slice(1);

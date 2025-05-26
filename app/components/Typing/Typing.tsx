@@ -1,168 +1,395 @@
-'use client';
+"use client";
 
-import { useContext, useEffect, useRef, useState } from 'react';
 import { TypingContext } from '@/app/(context)/typing';
+import { TypingResult } from '@/app/types';
+import { useCallback, useContext, useEffect, useReducer, useState } from 'react';
+import typingReducer, { initialState } from './actions/typing.reducer';
+import { TypeModeContext } from '@/app/(context)/typemode';
 import { ProfileContext } from '@/app/(context)/profile.context';
-import Caret from './Caret';
-import { TypingWords } from './types';
+import useSound from '@/app/(hooks)/useSound';
+import { getRandomWords, getTypingWords } from '@/app/helper';
+import { getRandomQuoteByLength } from '@/app/(services)/qouteable';
+import Counter from './Counter';
+import { IconLock } from '@/public/assets';
+import LoadingError from './LoadingError';
+import Input from './Input';
+import Restart from './Restart';
+import Result from './Result';
+import Loading from '../ui/Loading';
+// Import your typewriter sound file (adjust the path as needed)
+import typewriterSound from '../../../public/assets/typewriter.wav';
+
 
 interface Props {
-  words: TypingWords;
-  wordIndex: number;
-  charIndex: number;
+  testText?: string;
   secondCaret?: { wordIndex: number; charIndex: number };
+  oneVersusOne?: boolean;
+  typeModeCustom?: string;
+  onCaretPositionChange?: (wordIndex: number, charIndex: number) => void;
+  onResult?: (result: TypingResult) => void;
 }
 
-export default function Input(props: Props) {
-  const { words, wordIndex, charIndex, secondCaret } = props;
-  const { typingStarted, typingFocused, lineHeight, setLineHeight } =
-    useContext(TypingContext);
-  const { profile } = useContext(ProfileContext);
-  const [wordsOffset, setWordsOffset] = useState(0);
+// Used to abort previous fetch call if new one is called
+let quoteAbortController: AbortController | null = null;
 
-  // const wordWrapperRef = useRef<HTMLDivElement>(null);
-  // const wordRef = useRef<HTMLDivElement | null>(null);
-  // const charRef = useRef<HTMLSpanElement | null>(null);
-  // const hiddenInputRef = useRef<HTMLInputElement | null>(null);
-  // const secondCaretWordRef = useRef<HTMLDivElement | null>(null);
-  // const secondCaretCharRef = useRef<HTMLSpanElement | null>(null;
+export default function Typing({
+  testText,
+  secondCaret,
+  oneVersusOne,
+  typeModeCustom,
+  onCaretPositionChange,
+  onResult,
+}: Props) {
+  const {
+    typingDisabled,
+    typingStarted,
+    typingFocused,
+    onUpdateTypingFocus,
+    onTypingStarted,
+    onTypingEnded,
+    setTypemodeVisible,
+  } = useContext(TypingContext);
+  const [state, dispatch] = useReducer(typingReducer, initialState);
+  const {
+    mode,
+    words,
+    time,
+    quote,
+    numbers,
+    punctuation,
+    quoteTags,
+    quoteTagsMode,
+  } = useContext(TypeModeContext);
+  const { profile, onTestsStartedUpdate, onTestsCompletedUpdate } =
+    useContext(ProfileContext);
+  const [isCapsLock, setIsCapsLock] = useState(false);
+  const [timeCountdown, setTimeCountdown] = useState<number>(time);
+  const [isLoading, setIsLoading] = useState(false);
+  const [loadingError, setLoadingError] = useState<404 | 500 | null>(null);
+  const playTypingSound = useSound(typewriterSound, 0.3);
 
-  const wordRef = useRef<HTMLDivElement | undefined>(undefined);
-  const wordWrapperRef = useRef<HTMLDivElement | null>(null);
-const charRef = useRef<HTMLSpanElement | undefined>(undefined);
-const secondCaretWordRef = useRef<HTMLDivElement | undefined>(undefined);
-const secondCaretCharRef = useRef<HTMLSpanElement | undefined>(undefined);
-const hiddenInputRef = useRef<HTMLInputElement | null>(null);
+  const isTypingDisabled =
+    typingDisabled || isLoading || loadingError || (oneVersusOne && !typingStarted);
 
   useEffect(() => {
-    if (typingStarted) hiddenInputRef.current?.focus();
-  }, [typingStarted]);
+    const handleMouseMove = () => {
+      onUpdateTypingFocus(false);
+    };
+
+    if (typingFocused) {
+      document.addEventListener('mousemove', handleMouseMove);
+    }
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, [typingFocused, onUpdateTypingFocus]);
 
   useEffect(() => {
-    if (!wordWrapperRef.current) return;
-    const { offsetTop, clientHeight } = wordWrapperRef.current;
-    setWordsOffset(Math.max(offsetTop - clientHeight, 0));
-  }, [charIndex]);
+    const typeHandler = (event: KeyboardEvent) => {
+      const { key } = event;
 
-  const firstWord = words[0]?.chars.join('');
+      if (key === 'Escape') {
+        onUpdateTypingFocus(false);
+      }
 
-  useEffect(() => {
-    setLineHeight((state) => wordWrapperRef.current?.clientHeight || state);
-
-    const interval = setInterval(() => {
-      setLineHeight((state) => {
-        if (state === 0 || wordWrapperRef.current?.clientHeight !== state) {
-          return wordWrapperRef.current?.clientHeight || state;
+      if (event.getModifierState && event.getModifierState('CapsLock')) {
+        setIsCapsLock(true);
+      } else {
+        setIsCapsLock(false);
+      }
+      if (event.ctrlKey && key === 'Backspace') {
+        onUpdateTypingFocus(true);
+        if (profile.customize.soundOnClick) playTypingSound();
+        return dispatch({ type: 'DELETE_WORD' });
+      }
+      if (key === 'Backspace') {
+        onUpdateTypingFocus(true);
+        if (profile.customize.soundOnClick) playTypingSound();
+        return dispatch({ type: 'DELETE_KEY' });
+      }
+      if (key === ' ') {
+        event.preventDefault();
+        onUpdateTypingFocus(true);
+        if (profile.customize.soundOnClick) playTypingSound();
+        return dispatch({ type: 'NEXT_WORD' });
+      }
+      if (key.length === 1) {
+        if (!typingStarted && !oneVersusOne) {
+          onTypingStarted();
         }
-        clearInterval(interval);
-        return state;
+        onUpdateTypingFocus(true);
+        if (profile.customize.soundOnClick) playTypingSound();
+        return dispatch({ type: 'TYPE', payload: key });
+      }
+    };
+    if (state.result.showResult || isTypingDisabled) {
+      document.removeEventListener('keydown', typeHandler);
+    } else document.addEventListener('keydown', typeHandler);
+
+    return () => document.removeEventListener('keydown', typeHandler);
+  }, [
+    typingStarted,
+    onTypingStarted,
+    state.result.showResult,
+    mode,
+    quote,
+    time,
+    words,
+    isTypingDisabled,
+    playTypingSound,
+    profile.customize.soundOnClick,
+    oneVersusOne,
+    onUpdateTypingFocus,
+  ]);
+
+  useEffect(() => {
+    if (typingStarted) {
+      if (profile.username) {
+        onTestsStartedUpdate();
+      }
+
+      dispatch({
+        type: 'START',
+        payload:
+          typeModeCustom ||
+          `${mode} ${mode === 'time' ? time : mode === 'words' ? words : quote}`,
       });
-    }, 200);
+    }
+  }, [typingStarted, profile.username, onTestsStartedUpdate, mode, time, words, quote, typeModeCustom]);
+
+  const onRestart = useCallback(() => {
+    onTypingEnded();
+    onUpdateTypingFocus(false);
+
+    quoteAbortController?.abort();
+    quoteAbortController = new AbortController();
+    setIsLoading(false);
+    setLoadingError(null);
+
+    if (testText !== undefined) {
+      if (!testText.trim().length) {
+        setIsLoading(true);
+      } else {
+        dispatch({ type: 'RESTART', payload: getTypingWords(testText.split(' ')) });
+        setIsLoading(false);
+      }
+    }
+
+    if (!oneVersusOne) {
+      if (mode === 'time') {
+        dispatch({
+          type: 'RESTART',
+          payload: getRandomWords(50, punctuation, numbers),
+        });
+        setTimeCountdown(time);
+      } else if (mode === 'words') {
+        dispatch({
+          type: 'RESTART',
+          payload: getRandomWords(words, punctuation, numbers),
+        });
+      } else {
+        dispatch({ type: 'RESTART', payload: [] });
+
+        setIsLoading(true);
+
+        const tags =
+          quoteTagsMode === 'only selected' && quoteTags.length
+            ? quoteTags.filter((tag) => tag.isSelected).map((tag) => tag.name)
+            : undefined;
+
+        getRandomQuoteByLength(quote, tags, quoteAbortController).then((data) => {
+          if (
+            (data.statusCode && data.statusCode === 404) ||
+            data.statusCode === 500
+          ) {
+            setLoadingError(data.statusCode);
+            setIsLoading(false);
+            return;
+          }
+
+          dispatch({
+            type: 'NEW_WORDS',
+            payload: {
+              words: getTypingWords(
+                data.content.replace(/—/g, '-').replace(/…/g, '...').split(' ')
+              ),
+              author: data.author,
+            },
+          });
+
+          setIsLoading(false);
+          setLoadingError(null);
+        });
+      }
+    }
+  }, [
+    time,
+    mode,
+    words,
+    quote,
+    testText,
+    oneVersusOne,
+    numbers,
+    punctuation,
+    quoteTagsMode,
+    quoteTags,
+    onTypingEnded,
+    onUpdateTypingFocus,
+  ]);
+
+  const onRepeat = () => {
+    onTypingEnded();
+    onUpdateTypingFocus(false);
+    dispatch({ type: 'RESTART' });
+
+    if (mode === 'time') {
+      setTimeCountdown(time);
+    }
+  };
+
+  useEffect(() => {
+    if (!state.words.length || (mode === 'time' && !oneVersusOne)) return;
+
+    const lastWordCorrect =
+      state.wordIndex === state.words.length - 1 &&
+      state.words[state.wordIndex].chars.every((char) => char.type === 'correct');
+
+    if (state.wordIndex === state.words.length || lastWordCorrect) {
+      dispatch({ type: 'RESULT' });
+      onUpdateTypingFocus(false);
+    }
+  }, [mode, state.words, state.charIndex, state.wordIndex, oneVersusOne, onUpdateTypingFocus]);
+
+  useEffect(() => {
+    if (oneVersusOne) return;
+
+    if (mode === 'time') {
+      if ((state.wordIndex + 1) % 10 === 0) {
+        dispatch({
+          type: 'ADD_WORDS',
+          payload: getRandomWords(10, punctuation, numbers),
+        });
+      }
+    }
+  }, [mode, state.wordIndex, oneVersusOne, punctuation, numbers]);
+
+  useEffect(() => {
+    onRestart();
+
+    return () => {
+      quoteAbortController?.abort();
+    };
+  }, [onRestart]);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+
+    if (typingStarted) {
+      interval = setInterval(() => {
+        dispatch({ type: 'TIMELINE' });
+
+        if (mode === 'time' && !oneVersusOne)
+          setTimeCountdown((prevState) => prevState - 1);
+      }, 1000);
+    } else {
+      clearInterval(interval!);
+    }
 
     return () => clearInterval(interval);
-  }, [profile.customize.fontSize]);
+  }, [typingStarted, mode, oneVersusOne]);
+
+  useEffect(() => {
+    if (timeCountdown === 0) {
+      dispatch({ type: 'RESULT', payload: time });
+      onUpdateTypingFocus(false);
+    }
+  }, [timeCountdown, time, onUpdateTypingFocus]);
+
+  useEffect(() => {
+    if (state.result.showResult) {
+      onTestsCompletedUpdate(state.result);
+
+      if (onResult) {
+        onResult(state.result);
+        onTypingEnded();
+      }
+
+      setTypemodeVisible(false);
+    } else {
+      setTypemodeVisible(true);
+    }
+  }, [state.result.showResult, onResult, onTestsCompletedUpdate, onTypingEnded, setTypemodeVisible]);
+
+  useEffect(() => {
+    if (onCaretPositionChange) {
+      onCaretPositionChange(state.wordIndex, state.charIndex);
+    }
+  }, [state.wordIndex, state.charIndex, onCaretPositionChange]);
+
+  const timelineLatest = state.result.timeline[state.result.timeline.length - 1];
 
   return (
-    <div className="relative overflow-hidden" style={{ height: lineHeight * 3 }}>
-      {words.length !== 0 && profile.customize.caretStyle !== 'off' && (
-        <Caret
-          lineHeight={lineHeight}
-          wordIndex={wordIndex}
-          charIndex={charIndex}
-          wordsOffset={wordsOffset}
-          firstWord={firstWord}
-          wordRef={wordRef}
-          charRef={charRef}
-        />
-      )}
-
-      {typingStarted && secondCaret && (
-        <Caret
-          lineHeight={lineHeight}
-          wordIndex={secondCaret.wordIndex}
-          charIndex={secondCaret.charIndex}
-          wordRef={secondCaretWordRef}
-          charRef={secondCaretCharRef}
-          firstWord={firstWord}
-          wordsOffset={wordsOffset}
-          className="opacity-40"
-        />
-      )}
-
-      <input
-        type="text"
-        className={`absolute inset-0 opacity-0 z-10 select-none text-base ${
-          typingFocused ? 'cursor-none' : 'cursor-default'
-        }`}
-        autoCapitalize="off"
-        ref={hiddenInputRef}
-        tabIndex={-1}
-      />
-
-      <div
-        className="flex flex-wrap select-none transition-transform duration-75"
-        style={{
-          transform:
-            secondCaret || typingStarted
-              ? `translateY(-${wordsOffset}px)`
-              : undefined,
-          fontSize: profile.customize.fontSize,
-        }}
-      >
-        {words.map((word, index) => {
-          const isCurrentWord = index === wordIndex;
-          const isSecondCaretWord =
-            secondCaret && index === secondCaret.wordIndex;
-
-          return (
-            <div
-              key={index}
-              className="px-1 py-0.5"
-              ref={isCurrentWord ? wordWrapperRef : undefined}
-            >
-              <div
-                className={`relative border-r border-transparent ${
-                  word.isIncorrect
-                    ? 'after:content-[""] after:absolute after:bottom-[1px] after:w-full after:h-[2px] after:bg-red-500 after:opacity-75 after:animate-line'
-                    : ''
-                }`}
-                ref={(node) => {
-                  if (isCurrentWord && node) wordRef.current = node;
-                  if (isSecondCaretWord && node) secondCaretWordRef.current = node;
-                }}
-              >
-                {word.chars.map((char, idx) => (
-                  <span
-                    key={idx}
-                    className={`inline-block border-l border-transparent ${
-                      char.type === 'correct'
-                        ? 'text-green-500'
-                        : char.type === 'incorrect'
-                        ? 'text-red-500'
-                        : char.type === 'extra'
-                        ? 'text-yellow-500'
-                        : 'text-gray-800'
-                    }`}
-                    ref={(node) => {
-                      if (isCurrentWord && idx === charIndex) {
-                        charRef.current = node ?? undefined;
-                      }
-                      if (
-                        isSecondCaretWord &&
-                        idx === secondCaret.charIndex
-                      ) {
-                        secondCaretCharRef.current = node ?? undefined;
-                      }
-                    }}
-                  >
-                    {char.content}
-                  </span>
-                ))}
+    <div className="relative outline-none h-max">
+      {!state.result.showResult || oneVersusOne ? (
+        <>
+          <div className="flex justify-center items-center mb-4 space-x-12">
+            {profile.customize.liveWpm && (
+              <div className="flex flex-col items-center">
+                <span>wpm</span>
+                <span>{timelineLatest?.wpm || '-'}</span>
               </div>
-            </div>
-          );
-        })}
-      </div>
+            )}
+            {profile.customize.liveAccuracy && (
+              <div className="flex flex-col items-center">
+                <span>accuracy</span>
+                <span>{timelineLatest?.accuracy || '-'}</span>
+              </div>
+            )}
+          </div>
+
+          <div
+            className="mx-auto"
+            style={{ width: `${profile.customize.inputWidth * 0.95}%` }}
+          >
+        
+              <Counter
+                wordsLength={state.words.length}
+                mode={mode}
+                counter={mode === 'time' ? timeCountdown : state.wordIndex + 1}
+              />
+
+            {isCapsLock && (
+              <div className="flex items-center bg-[var(--clr-tooltip)] text-[var(--clr-char-correct)] px-2.5 py-2 rounded-md absolute top-[-35px] left-1/2 transform -translate-x-1/2 whitespace-nowrap">
+                <IconLock className="w-[30px] h-[30px]" />
+                <p>CAPS LOCK</p>
+              </div>
+            )}
+            {loadingError && state.words.length === 0 ? (
+              <LoadingError status={loadingError} />
+            ) : (
+              <Input
+                words={state.words}
+                wordIndex={state.wordIndex}
+                charIndex={state.charIndex}
+                secondCaret={secondCaret}
+              />
+            )}
+            {!oneVersusOne && (
+              <Restart onRestart={onRestart} className="relative mt-12 mx-auto" />
+            )}
+          </div>
+        </>
+      ) : (
+        <Result result={state.result} onRestart={onRestart} onRepeat={onRepeat} />
+      )}
+
+      {isLoading && (
+        <Loading
+          type="spinner"
+          className="absolute left-1/2 transform -translate-x-1/2 top-[35%]"
+        />
+      )}
     </div>
   );
 }
