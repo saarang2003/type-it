@@ -1,6 +1,6 @@
+import { getTypingResults } from "@/app/helper";
+import { TypingState } from "./typing.reducer";
 
-import { getTypingResults } from '@/helpers';
-import { TypingState } from '../typing.reducer';
 
 export default function timeline(state: TypingState): TypingState {
   if (!state.dateTypingStarted || state.result.showResult) return state;

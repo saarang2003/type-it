@@ -1,4 +1,4 @@
-import { TypingState } from '../typing.reducer';
+import { TypingState } from "./typing.reducer";
 
 export default function start(state: TypingState, testType: string): TypingState {
   return {

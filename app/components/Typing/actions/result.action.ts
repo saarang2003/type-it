@@ -1,6 +1,6 @@
+import { getTypingResults, twoDecimals } from "@/app/helper";
+import { TypingState } from "./typing.reducer";
 
-import { getTypingResults, twoDecimals } from '@/helpers';
-import { TypingState } from '../typing.reducer';
 
 export default function result(state: TypingState, time?: number): TypingState {
   // Calculate results
