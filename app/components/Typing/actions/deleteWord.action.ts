@@ -1,4 +1,5 @@
-import { TypingState } from '../typing.reducer';
+import { TypingState } from "./typing.reducer";
+
 
 export default function deleteWord(state: TypingState): TypingState {
   if (state.result.showResult) return state;

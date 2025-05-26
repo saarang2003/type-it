@@ -1,6 +1,7 @@
-import { getRandomWords } from '@/helpers';
-import { TypingState } from '../typing.reducer';
-import { TypingWords } from '../../types';
+
+
+import { TypingWords } from "../types";
+import { TypingState } from "./typing.reducer";
 
 export default function addWords(
   state: TypingState,

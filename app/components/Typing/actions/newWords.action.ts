@@ -1,5 +1,6 @@
-import { TypingWords } from '@/components/Typing/types';
-import { TypingState } from '../typing.reducer';
+import { TypingWords } from "../types";
+import { TypingState } from "./typing.reducer";
+
 
 export default function newWords(
   state: TypingState,
