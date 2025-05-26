@@ -4,7 +4,7 @@ import React, { createContext, useEffect, useState } from 'react';
 import { CaretStyleType, ThemeType } from '../(data)/types';
 import { TypingResult } from '../types';
 
-interface CustomizeBooleans {
+export interface CustomizeBooleans {
   liveWpm: boolean;
   liveAccuracy: boolean;
   smoothCaret: boolean;

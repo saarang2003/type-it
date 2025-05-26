@@ -7,11 +7,7 @@ import Tooltip from '../components/ui/Tooltip';
 import Switch from '../components/ui/Switch';
 import { data } from '../(data)';
 import ButtonRounded from '../components/ui/ButtonRounded';
-// import { ProfileContext } from '@/context/profile.context';
-// import { data } from '@/data';
-// import { IconCustomize } from '@/assets/image';
-// import { Switch, Tooltip, ButtonRounded } from '@/components/UI';
-// import Modal from '@/components/UI/Modal';
+import { CustomizeBooleans, ProfileContext } from './profile.context';
 
 
 interface Props {
@@ -28,6 +24,13 @@ export default function CustomizeModal({ onClose }: Props) {
 
   const [activeTooltip, setActiveTooltip] = useState<'fontSize' | 'inputWidth' | null>(null);
 
+   const {
+    profile,
+    onCustomizeUpdateState,
+    onCustomizeToggleState,
+    onCustomizeResetState,
+  } = useContext(ProfileContext);
+
   const {
     liveWpm,
     liveAccuracy,
@@ -39,9 +42,22 @@ export default function CustomizeModal({ onClose }: Props) {
     theme,
   } = profile.customize;
 
+  const booleanCustomizeOptions: {
+  label: string;
+  id: string;
+  key: keyof CustomizeBooleans;
+  value: boolean;
+}[] = [
+  { label: 'Live WPM', id: 'live-wpm', key: 'liveWpm', value: liveWpm },
+  { label: 'Live Accuracy', id: 'live-accuracy', key: 'liveAccuracy', value: liveAccuracy },
+  { label: 'Smooth Caret', id: 'smooth-caret', key: 'smoothCaret', value: smoothCaret },
+  { label: 'Sound on Click', id: 'sound-on-click', key: 'soundOnClick', value: soundOnClick },
+];
+
+
+
   const handleClose = () => {
     onClose();
-    onCustomizeUpdateServer();
   };
 
   return (
@@ -53,28 +69,23 @@ export default function CustomizeModal({ onClose }: Props) {
     >
       <div className="w-full">
         {/* Switches */}
-        {[
-          { label: 'Live WPM', id: 'live-wpm', value: liveWpm, key: 'liveWpm' },
-          { label: 'Live Accuracy', id: 'live-accuracy', value: liveAccuracy, key: 'liveAccuracy' },
-          { label: 'Smooth Caret', id: 'smooth-caret', value: smoothCaret, key: 'smoothCaret' },
-          { label: 'Sound on Click', id: 'sound-on-click', value: soundOnClick, key: 'soundOnClick' },
-        ].map(({ label, id, value, key }) => (
-          <div className="flex items-center flex-wrap mb-2" key={id}>
-            <label
-              htmlFor={id}
-              className={`mr-4 opacity-75 transition-opacity select-none ${value ? 'opacity-100' : ''}`}
-            >
-              {label}
-            </label>
-            <Tooltip text={value ? 'on' : 'off'} position="right" showOnHover>
-              <Switch
-                id={id}
-                state={value}
-                onToggle={() => onCustomizeToggleState(key as keyof typeof profile.customize)}
-              />
-            </Tooltip>
-          </div>
-        ))}
+      {booleanCustomizeOptions.map(({ label, id, key, value }) => (
+  <div className="flex items-center flex-wrap mb-2" key={id}>
+    <label
+      htmlFor={id}
+      className={`mr-4 opacity-75 transition-opacity select-none ${value ? 'opacity-100' : ''}`}
+    >
+      {label}
+    </label>
+    <Tooltip text={value ? 'on' : 'off'} position="right" showOnHover>
+      <Switch
+        id={id}
+        state={value}
+        onToggle={() => onCustomizeToggleState(key)}
+      />
+    </Tooltip>
+  </div>
+))}
 
         {/* Font Size Slider */}
         <div
