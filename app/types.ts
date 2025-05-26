@@ -4,7 +4,7 @@ export type TypingResult = {
         accuracy : number;
         raw : number ;
         second : number;
-    },
+    }[],
     error : number;
     testType : string | null;
     qouteAuthor : string;

@@ -24,8 +24,8 @@ export default function restart(
     result: {
       showResult: false,
       timeline: [],
-      errors: 0,
-      quoteAuthor: undefined,
+      error: 0,
+      qouteAuthor: " ",
       testType: null,
     },
     dateTypingStarted: null,

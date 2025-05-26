@@ -1,4 +1,5 @@
-import { TypingState } from '../typing.reducer';
+
+import { TypingState } from "./typing.reducer";
 
 export default function type(state: TypingState, key: string): TypingState {
   const words = state.words.slice(0);

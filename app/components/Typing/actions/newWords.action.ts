@@ -13,7 +13,7 @@ export default function newWords(
     words: payload.words,
     result: {
       ...state.result,
-      quoteAuthor: payload.author,
+      qouteAuthor: payload.author ?? "",
     },
   };
 }

@@ -27,9 +27,9 @@ export default function deleteKey(state: TypingState): TypingState {
   const currentWord = updatedWords[state.wordIndex];
   const prevChar = currentWord.chars[state.charIndex - 1];
 
-  let errors = state.result.errors;
+  let error = state.result.error;
   if (currentWord.isIncorrect) {
-    errors--;
+    error--;
     currentWord.isIncorrect = false;
   }
 
@@ -52,7 +52,7 @@ export default function deleteKey(state: TypingState): TypingState {
     typedCorrectly: wasCorrect ? state.typedCorrectly - 1 : state.typedCorrectly,
     result: {
       ...state.result,
-      errors,
+      error,
     },
   };
 }

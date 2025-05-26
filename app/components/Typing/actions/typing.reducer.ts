@@ -1,17 +1,15 @@
-import { TypingResult } from '@/types';
-import { TypingWords } from '../types';
-import {
-  type,
-  nextWord,
-  deleteKey,
-  deleteWord,
-  addWords,
-  restart,
-  timeline,
-  result,
-  newWords,
-  start,
-} from './actions';
+import { TypingResult } from "@/app/types";
+import { TypingWords } from "../types";
+import start from "./start.action";
+import type from "./type.action";
+import nextWord from "./nextWord.action";
+import deleteKey from "./deleteKey.action";
+import deleteWord from "./deleteWord.action";
+import addWords from "./addWords.action";
+import restart from "./restart.action";
+import timeline from "./timeline.action";
+import result from "./result.action";
+import newWords from "./newWords.action";
 
 export type TypingResultReducer = TypingResult & { showResult: boolean };
 
@@ -36,8 +34,9 @@ export const initialState: TypingState = {
   result: {
     showResult: false,
     timeline: [],
-    errors: 0,
+    error: 0,
     testType: null,
+    qouteAuthor: "",
   },
   dateTypingStarted: null,
 };

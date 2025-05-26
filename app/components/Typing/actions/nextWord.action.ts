@@ -32,7 +32,7 @@ export default function nextWord(state: TypingState): TypingState {
       : state.typedCorrectly + 1,
     result: {
       ...state.result,
-      errors: word.isIncorrect ? state.result.errors + 1 : state.result.errors,
+      error: word.isIncorrect ? state.result.error + 1 : state.result.error,
     },
   };
 }
