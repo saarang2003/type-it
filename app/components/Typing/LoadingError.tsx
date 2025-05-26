@@ -1,18 +1,19 @@
 'use client';
 
+import { ModalContext } from '@/app/(context)/modal';
+import { TypeModeContext } from '@/app/(context)/typemode';
 import { useContext, Fragment } from 'react';
-import { TypemodeContext } from '@/context/typemode.context';
-import { ModalContext } from '@/context/modal.context';
+import Tooltip from '../ui/Tooltip';
+import { IconRedirect, IconTags } from '@/public/assets';
 import { data } from '@/app/(data)';
-import { IconRedirect, IconTags } from '';
-import { ButtonRounded, Tooltip } from '@/components/UI';
+import ButtonRounded from '../ui/ButtonRounded';
 
 interface Props {
   status: 404 | 500;
 }
 
 export default function LoadingError({ status }: Props) {
-  const { mode, quote, onMode } = useContext(TypemodeContext);
+  const { mode, quote, onMode } = useContext(TypeModeContext);
   const { onOpenModal } = useContext(ModalContext);
 
   return (
@@ -70,11 +71,11 @@ export default function LoadingError({ status }: Props) {
         <>
           <div className="flex flex-col items-center">
             <p>
-              Couldn't find a {quote !== 'all' && quote} quote with selected tags.
+              Couldn&#39;t find a {quote !== 'all' && quote} quote with selected tags.
             </p>
 
             <p className="text-[var(--clr-text)] opacity-75 mt-[5px] text-[16px]">
-              Try changing quote length to <span className="font-bold">'all'</span> or update quote tags.
+              Try changing quote length to <span className="font-bold">&#39;all&#39;</span> or update quote tags.
             </p>
 
             <div className="mt-[20px] flex justify-center">

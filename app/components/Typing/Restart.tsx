@@ -1,8 +1,10 @@
 'use client';
 
 import { useRef } from 'react';
-import { IconRefresh } from '@/assets/image';
-import { ButtonRounded, Tooltip } from '@/components/UI';
+import Tooltip from '../ui/Tooltip';
+import ButtonRounded from '../ui/ButtonRounded';
+import { IconRefresh } from '@/public/assets';
+
 
 interface Props {
   onRestart: () => void;

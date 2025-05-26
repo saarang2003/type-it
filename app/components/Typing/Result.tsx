@@ -1,5 +1,7 @@
 'use client';
 
+import { TypingContext } from '@/app/(context)/typing';
+import { TypingResult } from '@/app/types';
 import { useContext, useEffect } from 'react';
 import {
   ResponsiveContainer,
@@ -12,13 +14,12 @@ import {
   Legend,
   Line,
 } from 'recharts';
-
-import { TypingContext } from '@/context/typing.context';
-import { TypingResult } from '@/types';
-import { addColorOpacity, getTimeSince } from '@/helpers';
-import { IconKeyboardArrowLeft, IconLoop } from '@/assets/image';
-import { ButtonRounded, PercentCircleChart, Tooltip } from '@/components/UI';
-import ResultCustomTooltip from '../ResultCustomTooltip';
+import Tooltip from '../ui/Tooltip';
+import PercentCircleChart from '../ui/PercentCircleChart';
+import { getTimeSince } from '@/app/helper';
+import ButtonRounded from '../ui/ButtonRounded';
+import { IconKeyboardArrowLeft, IconLoop } from '@/public/assets';
+import ResultCustomTooltip from './ResultCustomTooltip';
 
 interface Props {
   result: TypingResult;
@@ -49,12 +50,18 @@ export default function Result({
     colorAccuracy: window
       .getComputedStyle(document.body)
       .getPropertyValue('--clr-char-incorrect'),
-    colorRaw: addColorOpacity(textColorFromCSS, 0.6),
+    colorRaw: window
+      .getComputedStyle(document.body)
+      .getPropertyValue('--clr-raw'),
     labelOffset: -40,
     labelFontSize: 14,
   };
 
-  const { wpm, raw, accuracy, second: timeTook } = result.timeline.slice(-1)[0];
+  const lastTimeline =
+    Array.isArray(result.timeline) && result.timeline.length > 0
+      ? result.timeline[result.timeline.length - 1]
+      : { wpm: 0, raw: 0, accuracy: 0, second: 0 };
+  const { wpm, raw, accuracy, second: timeTook } = lastTimeline;
 
   return (
     <div className="relative">
@@ -81,7 +88,7 @@ export default function Result({
 
         <div className="w-[90%] h-[275px] max-[700px]:w-[85%] max-[650px]:w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={result.timeline}>
+            <LineChart data={Array.isArray(result.timeline) ? result.timeline : []}>
               <XAxis dataKey="second" />
               <YAxis dataKey="raw" yAxisId="left">
                 <Label
@@ -157,23 +164,23 @@ export default function Result({
           <div className="text-center">
             <p
               className={`${
-                result.errors === 0
+                result.error === 0
                   ? 'text-[var(--clr-char-correct)]'
                   : 'text-[var(--clr-char-incorrect)]'
               }`}
             >
               errors
             </p>
-            <p className="mt-1 text-[20px] font-bold">{result.errors}</p>
+            <p className="mt-1 text-[20px] font-bold">{result.error}</p>
           </div>
           <div className="text-center">
             <p>time</p>
             <p className="mt-1 text-[20px] font-bold">{timeTook}s</p>
           </div>
-          {result.quoteAuthor && (
+          {result.qouteAuthor && (
             <div className="text-center">
               <p>quote author</p>
-              <p className="mt-1 text-[20px] font-bold">{result.quoteAuthor}</p>
+              <p className="mt-1 text-[20px] font-bold">{result.qouteAuthor}</p>
             </div>
           )}
         </div>

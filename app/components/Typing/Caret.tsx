@@ -1,9 +1,8 @@
 "use client";
 
+import { ProfileContext } from '@/app/(context)/profile.context';
+import { TypingContext } from '@/app/(context)/typing';
 import { useContext, useEffect, useState } from 'react';
-import { TypingContext } from '@/context/typing.context';
-import { ProfileContext } from '@/context/profile.context';
-import styles from './Caret.module.scss';
 
 interface Props {
   lineHeight: number;
@@ -60,7 +59,7 @@ export default function Caret(props: Props) {
 
   useEffect(() => {
     setCharWidth(charRef.current?.clientWidth || 0);
-  }, [lineHeight]);
+  }, [lineHeight, charRef]);
 
   const sizingStyle = (
     caretStyle === 'line'
@@ -71,7 +70,12 @@ export default function Caret(props: Props) {
           top: 1,
         }
       : caretStyle === 'underline'
-      ? { width: charWidth, height: lineHeight / 30, left: 1, top: lineHeight - fontSize * 0.4 - 2 }
+      ? {
+          width: charWidth,
+          height: lineHeight / 30,
+          left: 1,
+          top: lineHeight - fontSize * 0.4 - 2,
+        }
       : caretStyle === 'block'
       ? {
           width: charWidth,
@@ -82,19 +86,28 @@ export default function Caret(props: Props) {
       : {}
   ) as React.CSSProperties;
 
+  const blinkClass = !typingStarted
+    ? smoothCaret
+      ? 'animate-pulse'
+      : 'animate-blink'
+    : '';
+
   return (
     <div
-      className={`${styles.caret} ${styles[`caret--${caretStyle}`]} ${
-        smoothCaret ? styles.smooth : ''
-      } ${
-        !typingStarted
-          ? smoothCaret
-            ? styles['blink-smooth']
-            : styles['blink']
-          : ''
-      } ${className || ''}`}
+      className={`
+        absolute
+        bg-[var(--clr-main)]
+        z-10
+        ${caretStyle === 'line' ? '' : ''}
+        ${caretStyle === 'block' ? 'rounded-sm opacity-60' : ''}
+        ${caretStyle === 'underline' ? '' : ''}
+        ${smoothCaret ? 'transition-all duration-100 ease-linear' : ''}
+        ${blinkClass}
+        ${className || ''}
+      `}
       style={{
         transform: `translate(${caretPos.x}px, ${caretPos.y}px)`,
+        position: 'absolute',
         ...sizingStyle,
       }}
     />
