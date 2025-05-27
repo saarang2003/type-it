@@ -1,10 +1,12 @@
+"use client";
 import { useContext } from 'react';
 import { TypingContext } from './(context)/typing';
-import useWindowDimensions from './(hooks)/useWindowDimensions';
+
 import Header from './components/Header';
 import Typemode from './components/Typemode';
 import Footer from './components/Footer';
 import Typing from './components/Typing/Typing';
+import useWindowDimensions from './(hooks)/useWindowDimensions';
 
 export default function App() {
   const { typingFocused,  typemodeVisible, onPreviewResult } =

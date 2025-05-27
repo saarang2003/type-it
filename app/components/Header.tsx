@@ -5,8 +5,7 @@ import { ModalContext } from '../(context)/modal';
 import { TypingContext } from '../(context)/typing';
 import Logo from './ui/Logo';
 import ButtonRounded from './ui/ButtonRounded';
-import { IconAccount, IconCustomize } from '@/public/assets';
-import Loading from './ui/Loading';
+import {  IconCustomize } from '@/public/assets';
 
 interface Props {
   windowWidth: number;
@@ -17,8 +16,7 @@ export default function Header({ windowWidth, onLogoClick }: Props) {
   const { activeModal, onOpenModal } = useContext(ModalContext);
   const { typingFocused } = useContext(TypingContext);
 
-  const loadingUser = false; // Replace with real loading state
-  const profile = { username: 'User' }; // Replace with actual user data
+
 
   return (
     <header
@@ -45,30 +43,6 @@ export default function Header({ windowWidth, onLogoClick }: Props) {
             {windowWidth > 600 && <span>Customize</span>}
           </ButtonRounded>
 
-          {profile.username ? (
-            <ButtonRounded
-              className="flex items-center ml-auto min-w-0 overflow-hidden"
-              onClick={() => onOpenModal({ modal: 'user' })}
-            >
-              <IconAccount className="flex-shrink-0" />
-              <span className="overflow-hidden whitespace-nowrap text-ellipsis block ml-2">
-                {profile.username}
-              </span>
-            </ButtonRounded>
-          ) : (
-            <ButtonRounded
-              className="flex items-center ml-auto min-w-0 overflow-hidden"
-              disabled={loadingUser}
-            >
-              <IconAccount className="flex-shrink-0" />
-              {windowWidth > 575 &&
-                (loadingUser ? (
-                  <Loading type="spinner" className="text-[9px] ml-[7px] mt-[5px]" />
-                ) : (
-                  <span className="ml-2">Account</span>
-                ))}
-            </ButtonRounded>
-          )}
         </div>
       </div>
     </header>
