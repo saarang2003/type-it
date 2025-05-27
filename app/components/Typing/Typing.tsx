@@ -10,6 +10,7 @@ import useSound from '@/app/(hooks)/useSound';
 import { getRandomWords, getTypingWords } from '@/app/helper';
 import { getRandomQuoteByLength } from '@/app/(services)/qouteable';
 import Counter from './Counter';
+import Image from 'next/image';
 import { IconLock } from '@/public/assets';
 import LoadingError from './LoadingError';
 import Input from './Input';
@@ -360,7 +361,11 @@ export default function Typing({
 
             {isCapsLock && (
               <div className="flex items-center bg-[var(--clr-tooltip)] text-[var(--clr-char-correct)] px-2.5 py-2 rounded-md absolute top-[-35px] left-1/2 transform -translate-x-1/2 whitespace-nowrap">
-                <IconLock className="w-[30px] h-[30px]" />
+                <Image 
+                src={IconLock}
+                alt='Icon lock'
+                className="w-[30px] h-[30px]" 
+                />
                 <p>CAPS LOCK</p>
               </div>
             )}

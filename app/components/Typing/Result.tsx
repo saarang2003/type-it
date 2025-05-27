@@ -199,13 +199,21 @@ export default function Result({
           )}
           {onRepeat && (
             <ButtonRounded onClick={onRepeat} className="flex items-center font-bold text-lg mt-2.5">
-              <IconLoop className="w-[15px] h-[15px] mr-2.5" />
+            <Image
+               src={IconLoop}
+               alt='Icon loop'
+              className="w-[15px] h-[15px] mr-2.5 "
+              />
               <span>Repeat</span>
             </ButtonRounded>
           )}
           {onGoBack && (
             <ButtonRounded onClick={onGoBack} className="flex items-center font-bold text-lg mt-2.5">
-              <IconKeyboardArrowLeft className="w-[15px] h-[15px] mr-2.5 scale-[1.75]" />
+             <Image
+               src={IconKeyboardArrowLeft}
+               alt='Icon keyword'
+              className="w-[15px] h-[15px] mr-2.5 scale-[1.75]"
+              />
               <span>Go Back</span>
             </ButtonRounded>
           )}

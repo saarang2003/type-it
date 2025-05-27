@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Tooltip from './Tooltip';
 import ButtonRounded from './ButtonRounded';
+import Image from 'next/image';
 import { IconContentCopy } from '@/public/assets';
 
 
@@ -41,7 +42,11 @@ export default function CopyButton({ value, className = '' }: Props) {
         onClick={handleCopyClick}
         className="flex items-center justify-center w-7 h-7 p-1 rounded-[5px]"
       >
-        <IconContentCopy className="block h-full" />
+        <Image 
+        src={IconContentCopy}
+        alt='icon content'
+        className="block h-full" 
+        />
       </ButtonRounded>
     </Tooltip>
   );
