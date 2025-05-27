@@ -1,6 +1,7 @@
 "use client";
 
 import { IconEyeOff, IconEyeOn } from "@/public/assets";
+import Image from "next/image";
 import Tooltip from "./Tooltip";
 
 
@@ -54,9 +55,17 @@ export default function InputField(props: Props) {
         >
           <button type="button" onClick={showPassword.onToggle}>
             {isPasswordVisible ? (
-              <IconEyeOn className="w-5 opacity-50" />
+                <Image 
+              src={IconEyeOn}
+              alt="Icon Eye On"
+              className="w-5 opacity-50"
+              />
             ) : (
-              <IconEyeOff className="w-5 opacity-50" />
+                <Image 
+              src={IconEyeOff}
+              alt="Icon Eye Off"
+              className="w-5 opacity-50"
+              />
             )}
           </button>
         </Tooltip>

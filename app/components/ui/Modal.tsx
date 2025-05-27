@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import AlertOutsideClick from './AlertOutsideClick';
 import Tooltip from './Tooltip';
 import { IconClose } from '@/public/assets';
+import Image from 'next/image';
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   onClose: () => void;
@@ -61,7 +62,10 @@ export default function Modal({
             {heading && (
               <div className="flex items-center">
                 {HeadingIcon && (
-                  <HeadingIcon className="w-6 h-6 mr-2 shrink-0" />
+                  <HeadingIcon
+                    className="w-6 h-6 mr-2 shrink-0"
+                    aria-label="Heading icon"
+                  />
                 )}
                 <h2 className="text-lg font-semibold">{heading}</h2>
               </div>
@@ -73,7 +77,11 @@ export default function Modal({
                 aria-label="close"
                 className="text-inherit hover:opacity-80 transition"
               >
-                <IconClose className="w-5 h-5" />
+                <Image
+                src={IconClose}
+                alt='Icon close'
+                className="w-5 h-5"
+                />
               </button>
             </Tooltip>
           </div>
