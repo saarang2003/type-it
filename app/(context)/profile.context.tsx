@@ -212,17 +212,17 @@ export function ProfileContextProvider({ children }: { children: React.ReactNode
     }));
   };
 
-  useEffect(() => {
-    const classList = document.body.classList;
-    for (let i = 0; i < classList.length; i++) {
-      if (classList[i].startsWith('theme--')) {
-        classList.remove(classList[i]);
-        break;
-      }
-    }
+useEffect(() => {
+  const classList = document.body.classList;
+  const themeClasses = Array.from(classList).filter((cls) => cls.startsWith('theme--'));
+  themeClasses.forEach((cls) => classList.remove(cls));
 
-    document.body.classList.add(`theme--${profile.customize.theme || 'default'}`);
-  }, [profile.customize.theme]);
+  const theme = `theme--${(profile.customize.theme || 'default').trim()}`;
+  if (theme && !classList.contains(theme)) {
+    classList.add(theme);
+  }
+}, [profile.customize.theme]);
+
 
   return (
     <ProfileContext.Provider
