@@ -1,6 +1,7 @@
 'use client';
 
 import { IconKeyboard } from "@/public/assets";
+import Image from "next/image";
 
 
 
@@ -14,7 +15,12 @@ export default function Logo({ colored }: Props) {
 
   return (
     <div className={`flex items-center select-none min-w-[255px] cursor-pointer max-[980px]:min-w-0`}>
-      <IconKeyboard className={`w-[50px] h-[50px] mr-2 transition-colors ${iconFill}`} />
+      <Image 
+      src={IconKeyboard}
+      alt="Logo"
+      className={`w-[50px] h-[50px] mr-2 transition-colors ${iconFill}`}
+      />
+
       <div className={`flex flex-col transition-colors ${textColor} max-[980px]:hidden`}>
         <span className="font-bold text-[35px] whitespace-nowrap">Typing app</span>
         <span className="text-[13px] mt-[2px] opacity-75 indent-[5px]">

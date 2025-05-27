@@ -5,7 +5,8 @@ import { ModalContext } from '../(context)/modal';
 import { TypingContext } from '../(context)/typing';
 import Logo from './ui/Logo';
 import ButtonRounded from './ui/ButtonRounded';
-import {  IconCustomize } from '@/public/assets';
+import Image from 'next/image';
+import   {IconCustomize}  from '@/public/assets';
 
 interface Props {
   windowWidth: number;
@@ -39,7 +40,13 @@ export default function Header({ windowWidth, onLogoClick }: Props) {
             onClick={() => onOpenModal({ modal: 'customize' })}
             active={activeModal?.modal === 'customize'}
           >
-            <IconCustomize />
+            <Image
+            src={IconCustomize}
+            alt="Customize"
+              width={20}
+              height={20}
+              className="w-5 h-5"
+            />
             {windowWidth > 600 && <span>Customize</span>}
           </ButtonRounded>
 

@@ -5,6 +5,7 @@ import { TypeModeContext } from '@/app/(context)/typemode';
 import { useContext, Fragment } from 'react';
 import Tooltip from '../ui/Tooltip';
 import { IconRedirect, IconTags } from '@/public/assets';
+import Image from 'next/image';
 import { data } from '@/app/(data)';
 import ButtonRounded from '../ui/ButtonRounded';
 
@@ -27,7 +28,11 @@ export default function LoadingError({ status }: Props) {
                 text={
                   <div className="flex items-center">
                     <span>quotable API</span>
-                    <IconRedirect className="w-[15px] h-[15px] ml-[10px]" />
+                    <Image
+                     src={IconRedirect}
+                     alt='Icon redirect'
+                    className="w-[15px] h-[15px] ml-[10px]"
+                    />
                   </div>
                 }
                 position="top"
@@ -84,7 +89,11 @@ export default function LoadingError({ status }: Props) {
                 className="text-[16px] flex items-center"
                 onClick={() => onOpenModal({ modal: 'quoteTags' })}
               >
-                <IconTags className="w-[20px] mr-[10px]" />
+                <Image 
+                src={IconTags}
+                alt='icon tags'
+                 className="w-[20px] mr-[10px]"
+                />
                 <span>Update Tags</span>
               </ButtonRounded>
             </div>

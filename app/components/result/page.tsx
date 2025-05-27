@@ -17,6 +17,7 @@ import {
 } from "recharts";
 import ResultCustomTooltip from "../Typing/ResultCustomTooltip";
 import { IconKeyboardArrowLeft, IconLoop } from "@/public/assets";
+import Image from "next/image";
 import ButtonRounded from "../ui/ButtonRounded";
 
 export type ResultOptions = {
@@ -216,19 +217,31 @@ export default function Result({
         <div className="flex space-x-4">
           {onRestart && (
             <ButtonRounded onClick={onRestart} className="flex items-center space-x-1">
-              <IconKeyboardArrowLeft className="w-5 h-5" />
+              <Image 
+              src={IconKeyboardArrowLeft}
+              alt="Icon Keyboard Arrow "
+             className="w-5 h-5"
+              />
               <span>Next Test</span>
             </ButtonRounded>
           )}
           {onRepeat && (
             <ButtonRounded onClick={onRepeat} className="flex items-center space-x-1">
-              <IconLoop className="w-5 h-5" />
+              <Image 
+              src={IconLoop}
+              alt="Icon Keyboard Arrow "
+             className="w-5 h-5"
+              />
               <span>Repeat</span>
             </ButtonRounded>
           )}
           {onGoBack && (
             <ButtonRounded onClick={onGoBack} className="flex items-center space-x-1">
-              <IconKeyboardArrowLeft className="w-5 h-5" />
+             <Image 
+              src={IconKeyboardArrowLeft}
+              alt="Icon Keyboard Arrow "
+             className="w-5 h-5"
+              />
               <span>Go Back</span>
             </ButtonRounded>
           )}

@@ -4,6 +4,7 @@ import { useRef } from 'react';
 import Tooltip from '../ui/Tooltip';
 import ButtonRounded from '../ui/ButtonRounded';
 import { IconRefresh } from '@/public/assets';
+import Image from 'next/image';
 
 
 interface Props {
@@ -30,7 +31,11 @@ export default function Restart({ onRestart, className }: Props) {
         className={`${className ?? ''} text-[var(--clr-char-correct)]`}
       >
         <ButtonRounded ref={resetRef} onClick={resetHandler}>
-          <IconRefresh className="w-[30px] h-[30px]" />
+          <Image
+          src={IconRefresh}
+          alt='Icon refresh'
+          className="w-[30px] h-[30px]"
+          />
         </ButtonRounded>
       </Tooltip>
     </>

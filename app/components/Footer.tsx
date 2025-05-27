@@ -4,6 +4,7 @@ import { useContext } from 'react';
 import { TypingContext } from '../(context)/typing';
 import Tooltip from './ui/Tooltip';
 import { IconRedirect } from '@/public/assets';
+import Image from 'next/image';
 
 export default function Footer() {
   const { typingFocused } = useContext(TypingContext);
@@ -19,7 +20,13 @@ export default function Footer() {
           text={
             <div className="flex items-center">
               <p>repository</p>
-              <IconRedirect className="w-[15px] h-[15px] ml-2.5" />
+              <Image 
+              src={IconRedirect}
+              alt="Redirect Icon"
+              width={15}
+              height={15}
+              className="w-[15px] h-[15px] ml-2.5"
+              />
             </div>
           }
           position="right"

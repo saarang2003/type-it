@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import TextButton from './ui/TextButton';
 
+
 export interface ColumnProps {
   buttons: {
     text: string | number;
@@ -63,7 +64,7 @@ export default function Column({ buttons }: ColumnProps) {
             onClick={action}
           >
             {Icon && (
-              <Icon className="w-[0.9rem] h-[0.9rem] mt-[3px] mr-[5px] flex-shrink-0" />
+               <Icon className="w-[0.9rem] h-[0.9rem] mt-[3px] mr-[5px] flex-shrink-0" />
             )}
             <span>{text}</span>
           </TextButton>

@@ -18,6 +18,7 @@ import Tooltip from '../ui/Tooltip';
 import PercentCircleChart from '../ui/PercentCircleChart';
 import { getTimeSince } from '@/app/helper';
 import ButtonRounded from '../ui/ButtonRounded';
+import Image from 'next/image';
 import { IconKeyboardArrowLeft, IconLoop } from '@/public/assets';
 import ResultCustomTooltip from './ResultCustomTooltip';
 
@@ -188,7 +189,11 @@ export default function Result({
         <div className="flex justify-center items-center flex-wrap mt-2.5 space-x-5">
           {onRestart && (
             <ButtonRounded onClick={onRestart} className="flex items-center font-bold text-lg mt-2.5">
-              <IconKeyboardArrowLeft className="w-[15px] h-[15px] mr-2.5 scale-[1.75]" />
+              <Image
+               src={IconKeyboardArrowLeft}
+               alt='Icon keyword'
+              className="w-[15px] h-[15px] mr-2.5 scale-[1.75]"
+              />
               <span>Next Test</span>
             </ButtonRounded>
           )}
