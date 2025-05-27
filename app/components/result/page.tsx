@@ -56,12 +56,20 @@ export default function Result({
     labelFontSize: 14,
   };
 
+  // Define the type for timeline entries
+  type TimelineEntry = {
+    wpm: number;
+    raw: number;
+    accuracy: number;
+    second: number;
+  };
+
   // Fix timeline access: last element is an object with known keys, not indexed by number
-  const timelineArray = Array.isArray(result.timeline)
-      ? result.timeline
-      : Object.values(result.timeline || {});
-    const lastResult = timelineArray[timelineArray.length - 1];
-    if (!lastResult) return;
+  const timelineArray: TimelineEntry[] = Array.isArray(result.timeline)
+      ? result.timeline as TimelineEntry[]
+      : Object.values(result.timeline || {}) as TimelineEntry[];
+  const lastResult = timelineArray[timelineArray.length - 1];
+  if (!lastResult) return null;
   const { wpm, raw, accuracy, second: timeTook } = lastResult;
 
   // Helper function (add opacity)

@@ -2,7 +2,7 @@ import { QouteLengthType } from "../types";
 
 
 export const data = {
-    apiUrl:  process.env.NODE_ENV === 'production' ? '' : 'http://localhost:3001',
+    apiUrl:  process.env.NODE_ENV === 'production' ? '' : 'http://localhost:3000',
 
 
     theme : ['default ' , 'cyberpunk' , 'neon' , 'retro'],

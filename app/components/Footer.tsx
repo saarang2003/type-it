@@ -26,7 +26,7 @@ export default function Footer() {
           showOnHover
         >
           <a
-            href="https://github.com/LukaKobaidze/typing-app"
+            href="https://github.com/saarang2003"
             rel="noreferrer"
             target="_blank"
             className="text-inherit"
