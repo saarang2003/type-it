@@ -155,7 +155,7 @@ export function ProfileContextProvider({ children }: { children: React.ReactNode
     const timelineArray = Array.isArray(result.timeline)
       ? result.timeline
       : Object.values(result.timeline || {});
-    const latest = timelineArray[timelineArray.length - 1];
+    const latest = timelineArray[timelineArray.length - 1] as { wpm: number; accuracy: number; raw: number } | undefined;
     if (!latest) return;
 
     const resultLatest: StatsAverageType = {
