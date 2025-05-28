@@ -319,7 +319,7 @@ export default function Typing({
     } else {
       setTypemodeVisible(true);
     }
-  }, [state.result.showResult, onResult, onTestsCompletedUpdate, onTypingEnded, setTypemodeVisible]);
+  }, [state.result, state.result.showResult, onResult, onTestsCompletedUpdate, onTypingEnded, setTypemodeVisible]);
 
   useEffect(() => {
     if (onCaretPositionChange) {

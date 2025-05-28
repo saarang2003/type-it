@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { createContext, useEffect, useState } from 'react';
 import { TypemodeTime, TypemodeType, TypemodeWords } from '../(data)/types';
@@ -30,7 +30,7 @@ interface Context {
 }
 
 const initial: Context = {
-  mode: 'qoute',
+  mode: 'words', // Changed from 'qoute' to 'words'
   time: 30,
   words: 30,
   quote: 'short',
@@ -67,11 +67,23 @@ export const TypeModeContextProvider = ({ children }: Props) => {
 
   useEffect(() => {
     getQuoteTagList().then((data) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const quoteTagsData: QuoteTagsType = data.map((tag: any) => ({
-        name: tag.name,
-        isSelected: false,
-      }));
+      type QuoteTagApiType = { name: string };
+      let quoteTagsData: QuoteTagsType = [];
+      if (Array.isArray(data)) {
+        if (typeof data[0] === 'string') {
+          // If data is string[]
+          quoteTagsData = (data as string[]).map((name) => ({
+            name,
+            isSelected: false,
+          }));
+        } else {
+          // If data is QuoteTagApiType[]
+          quoteTagsData = ((data as unknown) as QuoteTagApiType[]).map((tag) => ({
+            name: tag.name,
+            isSelected: false,
+          }));
+        }
+      }
       setQuoteTags(quoteTagsData);
     });
   }, []);

@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useContext, useMemo } from 'react';
+import { useContext, useMemo, useEffect, useState } from 'react';
 import { TypeModeContext } from '../(context)/typemode';
 import { ModalContext } from '../(context)/modal';
 import { TypemodeType } from '../(data)/types';
@@ -29,12 +29,26 @@ export default function Typemode({ className }: Props) {
     onPunctuationToggle,
     onNumbersToggle,
   } = useContext(TypeModeContext);
-
   const { onOpenModal } = useContext(ModalContext);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const typemodeKeys = Object.keys(data.typemode) as TypemodeType[];
 
   const colFirstButtons = useMemo<ColumnProps['buttons']>(() => {
+    if (!isClient) {
+      return [
+        {
+          Icon: IconTags,
+          text: 'tags',
+          action: () => {},
+          active: false,
+        },
+      ]; // SSR default
+    }
     if (mode === 'words' || mode === 'time') {
       return [
         {
@@ -51,7 +65,6 @@ export default function Typemode({ className }: Props) {
         },
       ];
     }
-
     return [
       {
         Icon: IconTags,
@@ -60,18 +73,21 @@ export default function Typemode({ className }: Props) {
         active: quoteTagsMode === 'only selected',
       },
     ];
-  }, [mode, punctuation, numbers, quoteTagsMode]);
-
-  const modeIcons: Record<TypemodeType, React.FC<React.SVGProps<SVGSVGElement>>> = { time: IconTime, words: IconWords, qoute: IconQuote };
+  }, [isClient, mode, punctuation, numbers, quoteTagsMode, onPunctuationToggle, onNumbersToggle, onOpenModal]);
 
   const colSecondButtons = useMemo<ColumnProps['buttons']>(() => {
+    const modeIcons: Record<TypemodeType, React.FC<React.SVGProps<SVGSVGElement>>> = {
+      time: IconTime,
+      words: IconWords,
+      qoute: IconQuote,
+    };
     return typemodeKeys.map((modeLocal) => ({
       Icon: modeIcons[modeLocal],
       text: modeLocal,
       action: () => onMode(modeLocal),
       active: modeLocal === mode,
     }));
-  }, [mode]);
+  }, [mode, onMode, typemodeKeys]);
 
   const colThirdButtons = useMemo<ColumnProps['buttons']>(() => {
     if (mode === 'time') {
@@ -88,19 +104,12 @@ export default function Typemode({ className }: Props) {
         active: wordsLocal === words,
       }));
     }
-
-    interface QuoteButton {
-      text: string;
-      action: () => void;
-      active: boolean;
-    }
-
-    return data.typemode.qoute.map((quoteLocal: string): QuoteButton => ({
+    return data.typemode.qoute.map((quoteLocal: string) => ({
       text: quoteLocal,
       action: () => onQuote(quoteLocal as QouteLengthType),
       active: quote === 'all' ? quoteLocal !== 'all' : quoteLocal === quote,
     }));
-  }, [mode, time, words, quote]);
+  }, [mode, time, words, quote, onTime, onWords, onQuote]);
 
   return (
     <div
@@ -112,7 +121,6 @@ export default function Typemode({ className }: Props) {
       `}
     >
       <Column buttons={colFirstButtons} />
-
       {!!colFirstButtons.length && (
         <div
           className={`
@@ -122,9 +130,7 @@ export default function Typemode({ className }: Props) {
           `}
         />
       )}
-
       <Column buttons={colSecondButtons} />
-
       {!!colThirdButtons.length && (
         <div
           className={`
@@ -134,7 +140,6 @@ export default function Typemode({ className }: Props) {
           `}
         />
       )}
-
       <Column buttons={colThirdButtons} />
     </div>
   );
